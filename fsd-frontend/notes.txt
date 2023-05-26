@@ -1,0 +1,9 @@
+MEAN stack:
+React.js - it is frontend library used for built UI
+application layer - Express,nodejs
+Express:
+backend web application framework for nodejs
+nodejs:
+backend js runtime environment
+database layer
+consiste of database
