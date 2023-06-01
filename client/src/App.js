@@ -1,9 +1,48 @@
-import React from 'react'
+import './App.css';
+
+import { useState } from 'react';
+
+import Shortener from './Components/Shortener';
+import Login from './Components/Login';
+
+import Signup from './Components/Signup';
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
+  const [loginData, setLoginData] = useState(
+    localStorage.getItem('loginData')
+      ? JSON.parse(localStorage.getItem('loginData'))
+      : null
+  );
+
+  const [apiKey, setApiKey] = useState('');
+
   return (
-    <div>App</div>
-  )
+    <div className="App">
+     <Router>
+     <Routes>
+        <Route
+          path="/"
+          element={
+            loginData ? (
+              <Shortener
+                apiKey={apiKey}
+                setApiKey={setApiKey}
+                loginData={loginData}
+                setLoginData={setLoginData}
+              />
+            ) : (
+              <Login loginData={loginData} setLoginData={setLoginData} />
+            )
+          }
+        />
+
+        <Route path="register" element={<Signup />} />
+      </Routes>
+     </Router>
+    </div>
+  );
 }
 
-export default App
+export default App;

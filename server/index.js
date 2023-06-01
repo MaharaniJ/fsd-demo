@@ -1,9 +1,42 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
-import cors from 'cors'
+const express = require("express");
+const cors = require("cors");
 
-const app = express()
-app.use(bodyParser.json({limit:'30mb',extended:true}))
-app.use(bodyParser.urlencoded({limit:'30mb',extended:true}))
-app.use(cors())
+const colors = require("color");
+const dotenv = require("dotenv").config();
+
+const userRoutes = require("./routes/userRoutes");
+const urlRoutes = require("./routes/urlRoutes");
+const authRoutes = require("./routes/authRoutes");
+
+const path = require("path");
+
+const { errorHandler } = require("./middleware/errorMiddleware");
+
+const connectDB = require("./config/db");
+
+const port = process.env.PORT || 5000;
+
+connectDB();
+const app = express();
+
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+
+app.get("*", function (request, response) {
+    response.sendFile(
+        path.resolve(__dirname, "../frontend/build", "index.html")
+    );
+});
+
+app.use(cors({ 
+    origin: "http://localhost:3000",
+    credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/users", userRoutes);
+app.use("/api/urls", urlRoutes);
+app.use("/api/auth", authRoutes);
+
+app.use(errorHandler);
+
+app.listen(port, () => console.log(`Server on port ${port}`));
