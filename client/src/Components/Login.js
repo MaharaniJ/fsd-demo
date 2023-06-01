@@ -175,5 +175,5 @@ function Login({ loginData, setLoginData }) {
     </div>
   );
 }
-
+// export the default login from this component
 export default Login;
